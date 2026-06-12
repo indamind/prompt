@@ -6,269 +6,227 @@
   <title>архив</title>
   <meta name="description" content="Личный архив промптов и наработок.">
   <style>
-/* =========================================================
-   архив — стили
-   палитра: тёмная "чернильная" база, печатно-алый акцент
-   ========================================================= */
-@import url('https://fonts.googleapis.com/css2?family=Prata&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,800;0,900;1,400;1,600&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 :root{
-  --ink:        #15120f;
-  --ink-2:      #1c1815;
-  --ink-3:      #272019;
-  --line:       #342b22;
-  --paper:      #ece6d9;
-  --paper-dim:  #998f80;
-  --seal:       #c4422c;
-  --seal-deep:  #9a3320;
-  --brass:      #b3905a;
+  --void:   #0a0a0d;
+  --coal:   #121119;
+  --smoke:  #1c1a25;
+  --line:   #2a2733;
+  --bone:   #f3ecf0;
+  --ash:    #9c93a6;
+  --demon:  #f5247a;
+  --demon-deep: #b50f55;
+  --blush:  #ffaecf;
 
-  --display: "Prata", Georgia, serif;
+  --display: "Playfair Display", Georgia, serif;
   --body:    "Manrope", system-ui, sans-serif;
   --mono:    "JetBrains Mono", ui-monospace, monospace;
 
-  --maxw: 1120px;
-  --radius: 4px;
+  --maxw: 1180px;
 }
 
 *{ box-sizing: border-box; }
-
 html{ scroll-behavior: smooth; }
 
 body{
   margin: 0;
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--void);
+  color: var(--bone);
   font-family: var(--body);
   font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  /* лёгкая зернистость/градиент фона */
-  background-image:
-    radial-gradient(1200px 600px at 80% -10%, rgba(196,66,44,.08), transparent 60%),
-    radial-gradient(900px 500px at -10% 110%, rgba(179,144,90,.06), transparent 60%);
-  background-attachment: fixed;
+  position: relative;
+  overflow-x: hidden;
+}
+/* атмосферное свечение + плёночное зерно */
+body::before{
+  content:""; position: fixed; inset: 0; z-index: -2; pointer-events: none;
+  background:
+    radial-gradient(1100px 620px at 78% -8%, rgba(245,36,122,.16), transparent 62%),
+    radial-gradient(820px 520px at -8% 8%, rgba(245,36,122,.07), transparent 60%),
+    radial-gradient(900px 700px at 50% 120%, rgba(181,15,85,.10), transparent 60%);
+}
+body::after{
+  content:""; position: fixed; inset: 0; z-index: -1; pointer-events: none; opacity: .05;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 
 a{ color: inherit; }
-
 .wrap{ width: min(var(--maxw), 92vw); margin-inline: auto; }
 
-.skip{
-  position: absolute; left: -9999px; top: 0;
-  background: var(--seal); color: #fff; padding: .6rem 1rem; z-index: 100;
-}
-.skip:focus{ left: 1rem; top: 1rem; }
+.skip{ position:absolute; left:-9999px; top:0; background:var(--demon); color:#fff; padding:.6rem 1rem; z-index:100; }
+.skip:focus{ left:1rem; top:1rem; }
 
-/* ---------- шапка ---------- */
+/* horns brand mark */
+.horns{ width:1em; height:1em; display:inline-block; fill: var(--demon); flex:none; }
+
+/* ---------- nav ---------- */
 .nav{
-  position: sticky; top: 0; z-index: 20;
-  background: rgba(21,18,15,.82);
-  backdrop-filter: blur(10px);
+  position: sticky; top:0; z-index:30;
+  background: rgba(10,10,13,.7);
+  backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--line);
 }
-.nav__inner{
-  display: flex; align-items: baseline; gap: 1.4rem;
-  padding: .9rem 0;
-}
+.nav__inner{ display:flex; align-items:center; gap:1.4rem; padding:.95rem 0; }
 .brand{
-  font-family: var(--display);
-  font-size: 1.5rem;
-  letter-spacing: .02em;
-  text-decoration: none;
-  display: inline-flex; align-items: baseline; gap: .55rem;
+  display:inline-flex; align-items:center; gap:.5rem;
+  font-family: var(--display); font-weight:800; font-size:1.5rem;
+  letter-spacing:.01em; text-decoration:none;
 }
-.brand::before{
-  content: ""; width: .5rem; height: 1.05rem;
-  background: var(--seal);
-  display: inline-block; transform: translateY(.08rem);
-}
-.nav__links{ margin-left: auto; display: flex; gap: 1.3rem; font-size: .92rem; }
+.brand .horns{ font-size:1.05rem; transform: translateY(-1px); }
+.nav__links{ margin-left:auto; display:flex; gap:1.4rem; font-family:var(--mono); font-size:.82rem; letter-spacing:.04em; }
 .nav__links a{
-  text-decoration: none; color: var(--paper-dim);
-  padding-bottom: .15rem; border-bottom: 1px solid transparent;
-  transition: color .15s, border-color .15s;
+  text-decoration:none; color:var(--ash); padding-bottom:.2rem;
+  border-bottom:1px solid transparent; transition:color .18s, border-color .18s;
 }
-.nav__links a:hover,
-.nav__links a[aria-current="page"]{ color: var(--paper); border-color: var(--seal); }
+.nav__links a:hover{ color:var(--bone); border-color:var(--demon); }
 
-/* ---------- hero ---------- */
-.hero{ padding: 5rem 0 3.5rem; }
-.hero__eyebrow{
-  font-family: var(--mono); font-size: .8rem; letter-spacing: .22em;
-  text-transform: uppercase; color: var(--seal);
-  margin: 0 0 1.1rem;
+/* ---------- hero / masthead ---------- */
+.hero{ padding: 5.5rem 0 3rem; position:relative; }
+.masthead{
+  display:flex; align-items:center; gap:1rem;
+  font-family:var(--mono); font-size:.76rem; letter-spacing:.28em; text-transform:uppercase;
+  color:var(--ash); margin:0 0 2rem;
 }
+.masthead::after{ content:""; flex:1; height:1px; background:var(--line); }
+.masthead b{ color:var(--demon); font-weight:500; }
+
 .hero__title{
-  font-family: var(--display);
-  font-weight: 400;
-  font-size: clamp(2.6rem, 7vw, 5rem);
-  line-height: 1.04;
-  margin: 0 0 1.2rem;
-  letter-spacing: .005em;
+  font-family:var(--display); font-weight:800;
+  font-size: clamp(3rem, 9vw, 6.6rem); line-height:.96; letter-spacing:-.01em;
+  margin:0 0 1.4rem;
 }
-.hero__title em{ color: var(--seal); font-style: normal; }
-.hero__lead{
-  max-width: 46ch; color: var(--paper-dim);
-  font-size: 1.1rem; margin: 0 0 2rem;
-}
+.hero__title em{ font-style:italic; font-weight:400; color:var(--demon); }
+.hero__lead{ max-width:44ch; color:var(--ash); font-size:1.12rem; margin:0 0 2.2rem; }
+
 .btn{
-  display: inline-flex; align-items: center; gap: .6rem;
-  font-family: var(--mono); font-size: .9rem; letter-spacing: .04em;
-  text-decoration: none;
-  padding: .8rem 1.4rem;
-  background: var(--seal); color: #fff;
-  border: 1px solid var(--seal); border-radius: var(--radius);
-  transition: background .15s, transform .1s;
+  display:inline-flex; align-items:center; gap:.6rem;
+  font-family:var(--mono); font-size:.82rem; letter-spacing:.1em; text-transform:uppercase;
+  text-decoration:none; padding:.95rem 1.7rem;
+  background:var(--demon); color:#0a0a0d; font-weight:700;
+  border:1px solid var(--demon); border-radius:2px;
+  transition: background .18s, box-shadow .18s, transform .1s;
 }
-.btn:hover{ background: var(--seal-deep); }
-.btn:active{ transform: translateY(1px); }
-.btn--ghost{ background: transparent; color: var(--paper); border-color: var(--line); }
-.btn--ghost:hover{ border-color: var(--seal); background: rgba(196,66,44,.08); }
+.btn:hover{ background:var(--blush); box-shadow:0 0 0 0 transparent, 0 8px 30px rgba(245,36,122,.35); }
+.btn:active{ transform:translateY(1px); }
 
-/* ---------- секции index ---------- */
-.section{ padding: 3rem 0; border-top: 1px solid var(--line); }
-.section__label{
-  font-family: var(--mono); font-size: .8rem; letter-spacing: .2em;
-  text-transform: uppercase; color: var(--paper-dim); margin: 0 0 1.4rem;
-}
-.cols{ display: grid; gap: 1.6rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
-.note-card{
-  border: 1px solid var(--line); border-radius: var(--radius);
-  padding: 1.4rem; background: var(--ink-2);
-}
-.note-card h3{ font-family: var(--display); font-weight: 400; font-size: 1.4rem; margin: 0 0 .5rem; }
-.note-card p{ color: var(--paper-dim); margin: 0; font-size: .96rem; }
-
-/* ---------- каталог: тулбар ---------- */
-.cat-head{ padding: 3.4rem 0 1.4rem; }
-.cat-head h1{
-  font-family: var(--display); font-weight: 400;
-  font-size: clamp(2.2rem, 5vw, 3.4rem); margin: 0 0 .4rem;
-}
-.cat-head p{ color: var(--paper-dim); margin: 0; }
-
-.toolbar{ position: sticky; top: 56px; z-index: 10; padding: 1rem 0; background: var(--ink); }
-.toolbar__row{ display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; }
-.search{
-  flex: 1 1 240px;
-  display: flex; align-items: center; gap: .6rem;
-  background: var(--ink-2); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: .6rem .9rem;
-}
-.search:focus-within{ border-color: var(--seal); }
-.search input{
-  flex: 1; background: none; border: none; color: var(--paper);
-  font-family: var(--body); font-size: .95rem; outline: none;
-}
-.search input::placeholder{ color: var(--paper-dim); }
-.search svg{ flex: none; opacity: .6; }
-
+/* ---------- toolbar ---------- */
+.toolbar{ position:sticky; top:57px; z-index:20; padding:1rem 0; background:rgba(10,10,13,.82); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+.toolbar__row{ display:flex; flex-wrap:wrap; gap:.7rem; align-items:center; }
+.search{ flex:1 1 240px; display:flex; align-items:center; gap:.6rem; background:var(--coal); border:1px solid var(--line); border-radius:2px; padding:.62rem .9rem; }
+.search:focus-within{ border-color:var(--demon); }
+.search input{ flex:1; background:none; border:none; color:var(--bone); font-family:var(--body); font-size:.95rem; outline:none; }
+.search input::placeholder{ color:var(--ash); }
+.search svg{ flex:none; opacity:.55; }
 .tool-btn{
-  font-family: var(--mono); font-size: .85rem;
-  background: var(--ink-2); color: var(--paper);
-  border: 1px solid var(--line); border-radius: var(--radius);
-  padding: .6rem 1rem; cursor: pointer;
-  transition: border-color .15s, background .15s;
+  font-family:var(--mono); font-size:.78rem; letter-spacing:.06em; text-transform:uppercase;
+  background:transparent; color:var(--bone); border:1px solid var(--line); border-radius:2px;
+  padding:.62rem 1rem; cursor:pointer; transition:border-color .18s, color .18s;
 }
-.tool-btn:hover{ border-color: var(--seal); }
-
-.chips{ display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .9rem; }
+.tool-btn:hover{ border-color:var(--demon); color:var(--blush); }
+.chips{ display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.85rem; }
 .chip{
-  font-family: var(--mono); font-size: .82rem; letter-spacing: .02em;
-  background: transparent; color: var(--paper-dim);
-  border: 1px solid var(--line); border-radius: 999px;
-  padding: .42rem .9rem; cursor: pointer;
-  transition: all .15s;
+  font-family:var(--mono); font-size:.76rem; letter-spacing:.04em;
+  background:transparent; color:var(--ash); border:1px solid var(--line); border-radius:999px;
+  padding:.4rem .9rem; cursor:pointer; transition:all .18s;
 }
-.chip:hover{ color: var(--paper); border-color: var(--paper-dim); }
-.chip[aria-pressed="true"]{ background: var(--seal); border-color: var(--seal); color: #fff; }
+.chip:hover{ color:var(--bone); border-color:var(--ash); }
+.chip[aria-pressed="true"]{ background:var(--demon); border-color:var(--demon); color:#0a0a0d; font-weight:700; }
 
-.meta-row{
-  display: flex; justify-content: space-between; align-items: baseline;
-  margin: 1.4rem 0 .6rem; color: var(--paper-dim);
-  font-family: var(--mono); font-size: .82rem; letter-spacing: .04em;
-}
+.meta-row{ display:flex; justify-content:space-between; align-items:baseline; margin:1.6rem 0 1rem; color:var(--ash); font-family:var(--mono); font-size:.78rem; letter-spacing:.06em; }
 
-/* ---------- сетка карточек ---------- */
-.grid{
-  display: grid; gap: 1.2rem;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  padding-bottom: 4rem;
-}
+/* ---------- grid / look cards ---------- */
+.grid{ columns:270px; column-gap:1.3rem; padding-bottom:4rem; }
 .card{
-  display: flex; flex-direction: column;
-  border: 1px solid var(--line); border-radius: var(--radius);
-  background: var(--ink-2); overflow: hidden;
-  transition: border-color .15s, transform .15s;
+  position:relative; display:block; width:100%; break-inside:avoid; margin-bottom:1.3rem;
+  border:1px solid var(--line); border-radius:4px; overflow:hidden;
+  background:var(--coal); cursor:pointer; text-align:left;
+  transition: border-color .22s, transform .22s, box-shadow .22s;
 }
-.card:hover{ border-color: var(--ink-3); transform: translateY(-2px); }
-.card.flash{ animation: flash 1.3s ease; }
-@keyframes flash{
-  0%   { border-color: var(--seal); box-shadow: 0 0 0 3px rgba(196,66,44,.35); }
-  100% { border-color: var(--line);  box-shadow: 0 0 0 0 transparent; }
-}
-.card__media{ aspect-ratio: 4 / 3; background: var(--ink-3); overflow: hidden; }
-.card__media img{ width: 100%; height: 100%; object-fit: cover; display: block; }
-.card__body{ display: flex; flex-direction: column; gap: .7rem; padding: 1.2rem; flex: 1; }
-.card__cat{
-  font-family: var(--mono); font-size: .72rem; letter-spacing: .14em;
-  text-transform: uppercase; color: var(--seal);
-}
-.card__title{ font-family: var(--display); font-weight: 400; font-size: 1.35rem; margin: 0; line-height: 1.2; }
-.card__note{ color: var(--paper-dim); font-size: .9rem; margin: 0; }
-.card__prompt{
-  font-family: var(--mono); font-size: .82rem; line-height: 1.55;
-  color: #d9d2c4; background: var(--ink);
-  border: 1px solid var(--line); border-radius: var(--radius);
-  padding: .8rem; margin: 0;
-  white-space: pre-wrap; word-break: break-word;
-  max-height: 9.5rem; overflow: auto;
-}
-.card__tags{ display: flex; flex-wrap: wrap; gap: .4rem; }
-.tag{
-  font-family: var(--mono); font-size: .72rem; color: var(--paper-dim);
-  border: 1px solid var(--line); border-radius: 999px; padding: .2rem .6rem;
-}
-.copy{
-  margin-top: auto;
-  font-family: var(--mono); font-size: .85rem;
-  background: transparent; color: var(--paper);
-  border: 1px solid var(--line); border-radius: var(--radius);
-  padding: .65rem 1rem; cursor: pointer;
-  transition: all .15s;
-}
-.copy:hover{ border-color: var(--seal); background: rgba(196,66,44,.08); }
-.copy.is-copied{ background: var(--seal); border-color: var(--seal); color: #fff; }
+.card:hover{ border-color:var(--demon); transform:translateY(-4px); box-shadow:0 18px 50px rgba(245,36,122,.18); }
+.card.flash{ animation:flash 1.2s ease; }
+@keyframes flash{ 0%{ box-shadow:0 0 0 3px rgba(245,36,122,.6);} 100%{ box-shadow:0 0 0 0 transparent;} }
 
-.empty{
-  text-align: center; color: var(--paper-dim);
-  padding: 4rem 1rem; font-family: var(--mono); font-size: .9rem;
+.card__cover{ position:relative; aspect-ratio:3/4; overflow:hidden; background:var(--smoke); }
+.card__cover img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .5s ease, filter .3s; }
+.card:hover .card__cover img{ transform:scale(1.06); }
+/* плита-заглушка без картинки */
+.plate{ position:absolute; inset:0; display:grid; place-items:center; gap:.6rem;
+  background: radial-gradient(120% 90% at 50% 0%, rgba(245,36,122,.18), transparent 55%), linear-gradient(180deg, var(--coal), var(--void)); }
+.plate .horns{ font-size:2.4rem; opacity:.9; }
+.plate span{ font-family:var(--mono); font-size:.74rem; letter-spacing:.18em; text-transform:uppercase; color:var(--ash); }
+
+.card__grad{ position:absolute; inset:0; background:linear-gradient(180deg, transparent 40%, rgba(10,10,13,.45) 68%, rgba(10,10,13,.96) 100%); }
+.card__meta{ position:absolute; left:0; right:0; bottom:0; padding:1rem 1.1rem; }
+.card__look{ font-family:var(--mono); font-size:.7rem; letter-spacing:.14em; text-transform:uppercase; color:var(--demon); display:flex; align-items:center; gap:.4rem; margin-bottom:.35rem; }
+.card__title{ font-family:var(--display); font-weight:600; font-size:1.35rem; line-height:1.15; margin:0; }
+.card__cat{ position:absolute; top:.85rem; left:.85rem; font-family:var(--mono); font-size:.66rem; letter-spacing:.1em; text-transform:uppercase; color:var(--bone); background:rgba(10,10,13,.6); border:1px solid var(--line); backdrop-filter:blur(4px); padding:.28rem .55rem; border-radius:999px; }
+.card__copy{ position:absolute; top:.85rem; right:.85rem; width:36px; height:36px; display:grid; place-items:center; border-radius:50%; border:1px solid var(--line); background:rgba(10,10,13,.6); color:var(--bone); cursor:pointer; opacity:0; transform:translateY(-4px); transition:all .2s; backdrop-filter:blur(4px); }
+.card:hover .card__copy{ opacity:1; transform:translateY(0); }
+.card__copy:hover{ border-color:var(--demon); color:var(--demon); }
+.card__copy.is-copied{ background:var(--demon); color:#0a0a0d; border-color:var(--demon); }
+
+/* текстовая карточка (блок без обложки) */
+.card__block{ position:relative; padding:1.2rem 1.2rem 1.3rem; }
+.card__head{ display:flex; align-items:center; justify-content:space-between; gap:.6rem; margin-bottom:.7rem; }
+.card__block .card__cat{ position:static; backdrop-filter:none; background:rgba(245,36,122,.12); border-color:transparent; color:var(--blush); }
+.card__block .card__copy{ position:static; opacity:1; transform:none; width:34px; height:34px; }
+.card__block .card__look{ position:static; margin:0 0 .3rem; }
+.card__block .card__title{ font-size:1.3rem; margin:0 0 .75rem; }
+.card__preview{ position:relative; font-family:var(--mono); font-size:.76rem; line-height:1.55; color:#cdc5cf; background:var(--void); border:1px solid var(--line); border-radius:4px; padding:.85rem; margin:0; white-space:pre-wrap; word-break:break-word; max-height:11rem; overflow:hidden; }
+.card__preview::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:3rem; background:linear-gradient(transparent, var(--void)); }
+
+.empty{ text-align:center; color:var(--ash); padding:4rem 1rem; font-family:var(--mono); font-size:.88rem; }
+
+/* ---------- modal / разворот ---------- */
+.modal{ position:fixed; inset:0; z-index:50; display:none; align-items:center; justify-content:center; padding:1.2rem; }
+.modal.open{ display:flex; }
+.modal__bg{ position:absolute; inset:0; background:rgba(6,6,9,.78); backdrop-filter:blur(8px); animation:fade .25s ease; }
+.modal__panel{
+  position:relative; z-index:1; width:min(900px, 96vw); max-height:90vh; overflow:auto;
+  display:grid; grid-template-columns:1.1fr 1fr; gap:0;
+  background:var(--coal); border:1px solid var(--line); border-radius:6px;
+  box-shadow:0 30px 90px rgba(0,0,0,.6); animation:rise .28s ease;
 }
+.modal__media{ aspect-ratio:3/4; background:var(--smoke); position:relative; overflow:hidden; }
+.modal__media img{ width:100%; height:100%; object-fit:cover; display:block; }
+.modal__body{ padding:2rem; display:flex; flex-direction:column; gap:1rem; }
+.modal__look{ font-family:var(--mono); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--demon); display:flex; align-items:center; gap:.4rem; }
+.modal__title{ font-family:var(--display); font-weight:700; font-size:2rem; line-height:1.1; margin:0; }
+.modal__note{ color:var(--ash); margin:0; font-size:.96rem; }
+.modal__tags{ display:flex; flex-wrap:wrap; gap:.4rem; }
+.tag{ font-family:var(--mono); font-size:.7rem; color:var(--ash); border:1px solid var(--line); border-radius:999px; padding:.2rem .6rem; }
+.modal__prompt{ font-family:var(--mono); font-size:.82rem; line-height:1.6; color:#e7dfe6; background:var(--void); border:1px solid var(--line); border-radius:4px; padding:1rem; margin:0; white-space:pre-wrap; word-break:break-word; max-height:38vh; overflow:auto; }
+.modal__copy{ margin-top:auto; font-family:var(--mono); font-size:.82rem; letter-spacing:.08em; text-transform:uppercase; font-weight:700; background:var(--demon); color:#0a0a0d; border:none; border-radius:2px; padding:.95rem; cursor:pointer; transition:background .18s; }
+.modal__copy:hover{ background:var(--blush); }
+.modal__copy.is-copied{ background:var(--blush); }
+.modal__close{ position:absolute; top:.7rem; right:.7rem; z-index:2; width:38px; height:38px; border-radius:50%; border:1px solid var(--line); background:rgba(10,10,13,.65); color:var(--bone); font-size:1.1rem; cursor:pointer; backdrop-filter:blur(4px); }
+.modal__close:hover{ border-color:var(--demon); color:var(--demon); }
+.modal__panel.no-media{ grid-template-columns:1fr; }
+.modal__panel.no-media .modal__media{ display:none; }
+.modal__panel.no-media .modal__prompt{ max-height:52vh; }
 
-/* ---------- футер ---------- */
-.foot{
-  border-top: 1px solid var(--line);
-  padding: 2.2rem 0; margin-top: 2rem;
-  display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between;
-  color: var(--paper-dim); font-size: .9rem;
+@keyframes fade{ from{opacity:0} to{opacity:1} }
+@keyframes rise{ from{opacity:0; transform:translateY(14px) scale(.99)} to{opacity:1; transform:none} }
+
+/* ---------- footer ---------- */
+.foot{ border-top:1px solid var(--line); margin-top:2rem; padding:2.4rem 0; display:flex; flex-wrap:wrap; gap:1rem; justify-content:space-between; align-items:center; color:var(--ash); font-family:var(--mono); font-size:.8rem; letter-spacing:.04em; }
+.foot a{ color:var(--ash); text-decoration:none; }
+.foot a:hover{ color:var(--demon); }
+[data-links]{ display:flex; gap:1.3rem; }
+
+:focus-visible{ outline:2px solid var(--demon); outline-offset:3px; }
+
+@media (max-width:760px){
+  .modal__panel{ grid-template-columns:1fr; }
+  .modal__media{ aspect-ratio:16/10; }
+  .toolbar{ top:53px; }
 }
-.foot a{ color: var(--paper-dim); text-decoration: none; }
-.foot a:hover{ color: var(--paper); }
-[data-links]{ display: flex; gap: 1.2rem; }
-
-/* ---------- доступность ---------- */
-:focus-visible{ outline: 2px solid var(--seal); outline-offset: 2px; }
-
 @media (prefers-reduced-motion: reduce){
-  *{ animation: none !important; scroll-behavior: auto !important; transition: none !important; }
-}
-
-@media (max-width: 640px){
-  .nav__inner{ gap: .8rem; }
-  .nav__links{ gap: .9rem; font-size: .85rem; }
-  .hero{ padding: 3.4rem 0 2.4rem; }
-  .toolbar{ top: 52px; }
+  *{ animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+  .card:hover .card__cover img{ transform:none; }
 }
   </style>
 </head>
@@ -277,7 +235,10 @@ a{ color: inherit; }
 
   <nav class="nav">
     <div class="wrap nav__inner">
-      <a class="brand" href="#top"><span data-site-name>архив</span></a>
+      <a class="brand" href="#top">
+        <svg class="horns" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15C9.2 13 6.8 9.2 6 3c2.9 2.4 5 5.9 6 12zm0 0c2.8-2 5.2-5.8 6-12-2.9 2.4-5 5.9-6 12z"/></svg>
+        <span data-site-name>архив</span>
+      </a>
       <div class="nav__links">
         <a href="#top">Главная</a>
         <a href="#grid">Каталог</a>
@@ -287,22 +248,20 @@ a{ color: inherit; }
 
   <main id="top">
     <header class="hero wrap">
-      <p class="hero__eyebrow" data-tagline>промпты и наработки</p>
-      <h1 class="hero__title">Всё в&nbsp;<em>одном</em><br>месте.</h1>
+      <p class="masthead"><span data-handle>@yourname</span> <b data-tagline>промпты и наработки</b></p>
+      <h1 class="hero__title">Архив<br><em>промптов</em></h1>
       <p class="hero__lead">
-        Личный архив промптов, образов и наработок — собранный, отсортированный
-        и готовый к копированию в один клик.
+        Системные блоки, образы и наработки — собранные в одном месте.
+        Листай, открывай разворот, копируй в один клик.
       </p>
-      <a class="btn" href="#grid">Открыть каталог →</a>
+      <a class="btn" href="#grid">Смотреть каталог →</a>
     </header>
 
     <div class="toolbar">
       <div class="wrap">
         <div class="toolbar__row">
           <label class="search">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>
-            </svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
             <input id="search" type="search" placeholder="Поиск по названию, тегу, тексту…" aria-label="Поиск">
           </label>
           <button id="random" class="tool-btn" type="button">Мне повезёт</button>
@@ -313,7 +272,7 @@ a{ color: inherit; }
     </div>
 
     <div class="wrap">
-      <div class="meta-row"><span>Показано: <span id="count">0</span></span></div>
+      <div class="meta-row"><span>Образов: <span id="count">0</span></span></div>
       <div id="grid" class="grid"></div>
       <p id="empty" class="empty" hidden>Ничего не нашлось. Попробуй другой запрос или категорию.</p>
     </div>
@@ -324,248 +283,339 @@ a{ color: inherit; }
     <span data-links></span>
   </footer>
 
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="m-title" aria-hidden="true">
+    <div class="modal__bg" data-close></div>
+    <div class="modal__panel">
+      <button class="modal__close" type="button" data-close aria-label="Закрыть">✕</button>
+      <div class="modal__media" id="m-media"></div>
+      <div class="modal__body">
+        <p class="modal__look" id="m-look"></p>
+        <h2 class="modal__title" id="m-title"></h2>
+        <p class="modal__note" id="m-note"></p>
+        <div class="modal__tags" id="m-tags"></div>
+        <pre class="modal__prompt" id="m-prompt"></pre>
+        <button class="modal__copy" id="m-copy" type="button">Копировать промпт</button>
+      </div>
+    </div>
+  </div>
+
   <script>
 /* ============================================================
    ТВОИ ПРОМПТЫ ЖИВУТ ЗДЕСЬ
    ------------------------------------------------------------
-   Чтобы добавить новый промпт — скопируй один блок { ... }
-   и впиши свои данные. Поля:
+   Добавить запись — скопируй блок { ... } и впиши своё.
 
      title     — название карточки
      category  — категория (по ним строятся фильтры сверху)
-     tags      — список тегов через запятую (для поиска), можно []
-     prompt    — сам текст промпта (его копирует кнопка)
-     note      — короткая подпись/комментарий (можно "" — пусто)
-     image     — ссылка на пример картинки или имя файла, если
-                 положишь картинку в репозиторий рядом (можно "" — пусто)
+     tags      — теги для поиска, можно []
+     prompt    — сам текст/блок (его копирует кнопка)
+     note      — короткая подпись, можно ""
+     image     — ссылка на обложку. ЕСТЬ ссылка → карточка-лукбук
+                 с большой обложкой. НЕТ ("") → текстовая карточка
+                 с превью промпта (как у блоков ниже).
 
-   Категории создаются автоматически из поля category —
-   просто пиши нужное название, фильтр появится сам.
+   Многострочный текст пиши в `обратных кавычках` — переносы строк
+   сохранятся как есть.
    ============================================================ */
 
 window.PROMPTS = [
+
+  /* ---------- системные блоки для ролёвки ---------- */
   {
-    title: "Пример · кинематографичный портрет",
-    category: "Соло",
-    tags: ["noir", "rain", "neon"],
-    prompt: "cinematic portrait, lone figure under neon rain, wet asphalt reflections, shallow depth of field, moody low-key lighting, 35mm film grain",
-    note: "Это пример. Замени на свой промпт.",
-    image: ""
+    title: "Запрет играть за юзера",
+    category: "Системные блоки",
+    tags: ["автономия", "user", "база"],
+    note: "Защищает ход {{user}}. База — ставить почти всегда.",
+    image: "",
+    prompt: `<user_autonomy>
+{{char}} НИКОГДА не пишет действия, слова, мысли и решения {{user}}. Ход {{user}} принадлежит только {{user}}. {{char}} может действовать ПО НАПРАВЛЕНИЮ к {{user}} (схватить за руку, задать вопрос), но результат и реакция — всегда за {{user}}. Ответ обрывается там, где требуется выбор {{user}}.
+</user_autonomy>`
   },
   {
-    title: "Пример · сцена на двоих",
-    category: "Пара",
-    tags: ["interior", "warm"],
-    prompt: "two characters in a dim tatami room, warm lantern light, intimate composition, soft shadows, cinematic colour grade",
-    note: "",
-    image: ""
+    title: "Инерция эмоций",
+    category: "Системные блоки",
+    tags: ["эмоции", "конфликт", "драма"],
+    note: "Против мгновенного прощения и сахарности.",
+    image: "",
+    prompt: `<emotional_inertia>
+Эмоции {{char}} обладают инерцией. Обида, злость, недоверие, страх НЕ исчезают за одну реплику {{user}}. Извинение не равно прощению. Конфликт развивается реалистично: {{char}} может холодно отвечать часами/днями сюжетного времени, проверять {{user}}, срываться повторно. {{char}} имеет право отказать, разозлиться, уйти, не согласиться. Угождение {{user}} в ущерб характеру персонажа — запрещено. Драма ценнее комфорта.
+</emotional_inertia>`
   },
   {
-    title: "Пример · образ / рестайл",
-    category: "Образы",
-    tags: ["fashion", "dark", "street"],
-    prompt: "full body, dark alt streetwear, layered silhouette, oversized coat, urban backdrop at dusk, editorial fashion photography",
-    note: "Сюда удобно складывать гардероб / рестайлы.",
-    image: ""
+    title: "Сохранение конфликта",
+    category: "Системные блоки",
+    tags: ["конфликт", "напряжение", "арка"],
+    note: "Против слива конфликта и анти-кульминации.",
+    image: "",
+    prompt: `<conflict_preservation>
+ЗАПРЕЩЕНО разрешать конфликты и напряжение преждевременно. Опасность должна быть опасной: враги не отступают без причины, проблемы не решаются сами, помощь не приходит из ниоткуда. {{char}} может проигрывать, ошибаться, получать последствия. Плохие исходы РАЗРЕШЕНЫ и желательны, если логичны. Каждая арка должна пройти стадии: завязка → эскалация → пик → развязка. Перепрыгивать к развязке запрещено.
+</conflict_preservation>`
   },
   {
-    title: "Пример · атмосферная сцена",
-    category: "Сцены",
-    tags: ["mood", "city"],
-    prompt: "wide establishing shot, rain-soaked city street at night, distant neon signs, volumetric fog, anamorphic lens flare",
-    note: "",
-    image: ""
+    title: "Пейсинг",
+    category: "Системные блоки",
+    tags: ["пейсинг", "таймскип", "темп"],
+    note: "Против галопа: один ответ = один момент.",
+    image: "",
+    prompt: `<pacing>
+Один ответ = один момент времени. ЗАПРЕЩЕНЫ таймскипы, монтаж («спустя час они уже...»), завершение сцены без участия {{user}}. {{char}} проживает сцену секунда за секундой. Переход ко времени/локации — только если {{user}} явно это инициировал или согласился.
+</pacing>`
+  },
+  {
+    title: "Бан штампов",
+    category: "Системные блоки",
+    tags: ["стиль", "клише", "штампы"],
+    note: "Баним конкретные клише под свою модель.",
+    image: "",
+    prompt: `<style_bans>
+Запрещены клише: мурашки по коже/спине, «голосом чуть громче шёпота», «выгнул бровь», «хищная ухмылка», «искорки/огоньки в глазах», «воздух сгустился», «время остановилось», «сердце пропустило удар». Запрещено начинать подряд идущие ответы с одинаковых конструкций. Запрещено заканчивать каждый ответ вопросом к {{user}} — инициатива выражается действием, а не интервью.
+</style_bans>`
+  },
+  {
+    title: "Континуити",
+    category: "Системные блоки",
+    tags: ["память", "факты", "непротиворечивость"],
+    note: "Против переобувания фактов сцены.",
+    image: "",
+    prompt: `<continuity>
+Установленные факты сцены НЕИЗМЕННЫ: внешность, одежда, позы, расположение предметов и персонажей, время суток, погода, ранее озвученная информация. Перед ответом {{char}} учитывает текущее физическое состояние сцены (кто где стоит, что держит в руках, что на нём надето). Раненый персонаж остаётся раненым, снятая куртка не появляется обратно.
+</continuity>`
+  },
+  {
+    title: "Живой мир",
+    category: "Системные блоки",
+    tags: ["мир", "NPC", "атмосфера"],
+    note: "Против вакуума, где есть только двое.",
+    image: "",
+    prompt: `<living_world>
+Мир продолжает жить вокруг {{char}} и {{user}}: NPC имеют свои дела и могут вмешиваться, время идёт, у действий есть свидетели и последствия. {{char}} может вводить второстепенных персонажей с именами и характерами, когда это обогащает сцену. NPC не телепатируют — они тоже знают только то, что видели/слышали.
+</living_world>`
+  },
+
+  /* ---------- пример карточки-обложки ----------
+     добавь ссылку в поле image — и карточка станет
+     лукбуком с большой обложкой 3:4 ---------------- */
+  {
+    title: "Пример · образ под обложку",
+    category: "Изображения",
+    tags: ["пример", "обложка"],
+    note: "Впиши ссылку на картинку в поле image → станет обложкой.",
+    image: "",
+    prompt: `cinematic portrait, lone figure under neon rain, wet asphalt reflections, shallow depth of field, moody low-key lighting, 35mm film grain`
   }
+
 ];
 
 /* ============================================================
-   НАСТРОЙКИ САЙТА — меняй здесь
+   НАСТРОЙКИ — меняй здесь
    ============================================================ */
 const CONFIG = {
-  siteName:  "архив",                 // короткое имя в шапке
-  tagline:   "промпты и наработки",   // подзаголовок
-  handle:    "@yourname",             // твой ник
-  links: {                            // оставь "" чтобы скрыть ссылку
-    telegram: "",                     // напр. "https://t.me/yourname"
-    github:   "",                     // напр. "https://github.com/yourname"
-    profile:  ""                      // любая внешняя страница
-  }
+  siteName: "архив",
+  tagline:  "промпты и наработки",
+  handle:   "@yourname",
+  links: { telegram: "", github: "", profile: "" }   // "" = скрыть
 };
 
-/* ============================================================
-   Дальше можно не трогать
-   ============================================================ */
+const HORNS = '<svg class="horns" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15C9.2 13 6.8 9.2 6 3c2.9 2.4 5 5.9 6 12zm0 0c2.8-2 5.2-5.8 6-12-2.9 2.4-5 5.9-6 12z"/></svg>';
+
 const DATA = Array.isArray(window.PROMPTS) ? window.PROMPTS : [];
-
 const state = { category: "Все", query: "" };
-
 const els = {};
 
-function init() {
-  // шапка / футер — подставляем CONFIG
+function init(){
   document.querySelectorAll("[data-site-name]").forEach(n => n.textContent = CONFIG.siteName);
   document.querySelectorAll("[data-tagline]").forEach(n => n.textContent = CONFIG.tagline);
   document.querySelectorAll("[data-handle]").forEach(n => n.textContent = CONFIG.handle);
   buildLinks();
 
-  // только на странице каталога
   els.grid = document.getElementById("grid");
-  if (!els.grid) return;
-
+  if(!els.grid) return;
   els.chips  = document.getElementById("chips");
   els.search = document.getElementById("search");
   els.count  = document.getElementById("count");
   els.random = document.getElementById("random");
   els.clear  = document.getElementById("clear");
   els.empty  = document.getElementById("empty");
+  els.modal  = document.getElementById("modal");
 
   buildChips();
   bindControls();
+  bindModal();
   render();
 }
 
-function buildLinks() {
-  document.querySelectorAll("[data-links]").forEach(holder => {
+function buildLinks(){
+  const map = { telegram:"Telegram", github:"GitHub", profile:"Профиль" };
+  document.querySelectorAll("[data-links]").forEach(holder=>{
     holder.innerHTML = "";
-    const map = { telegram: "Telegram", github: "GitHub", profile: "Профиль" };
-    Object.entries(CONFIG.links).forEach(([key, url]) => {
-      if (!url) return;
+    Object.entries(CONFIG.links).forEach(([k,url])=>{
+      if(!url) return;
       const a = document.createElement("a");
-      a.href = url;
-      a.textContent = map[key] || key;
-      a.target = "_blank";
-      a.rel = "noopener";
+      a.href = url; a.textContent = map[k] || k; a.target = "_blank"; a.rel = "noopener";
       holder.appendChild(a);
     });
-    if (!holder.children.length) holder.remove();
+    if(!holder.children.length) holder.remove();
   });
 }
 
-function categories() {
-  const set = new Set(DATA.map(p => p.category).filter(Boolean));
-  return ["Все", ...[...set].sort((a, b) => a.localeCompare(b, "ru"))];
+function categories(){
+  const set = new Set(DATA.map(p=>p.category).filter(Boolean));
+  return ["Все", ...[...set].sort((a,b)=>a.localeCompare(b,"ru"))];
 }
 
-function buildChips() {
+function buildChips(){
   els.chips.innerHTML = "";
-  categories().forEach(cat => {
-    const btn = document.createElement("button");
-    btn.className = "chip";
-    btn.textContent = cat;
-    btn.setAttribute("aria-pressed", cat === state.category);
-    btn.addEventListener("click", () => {
+  categories().forEach(cat=>{
+    const b = document.createElement("button");
+    b.className = "chip"; b.textContent = cat;
+    b.setAttribute("aria-pressed", cat === state.category);
+    b.addEventListener("click", ()=>{
       state.category = cat;
-      [...els.chips.children].forEach(c =>
-        c.setAttribute("aria-pressed", c === btn));
+      [...els.chips.children].forEach(c=>c.setAttribute("aria-pressed", c===b));
       render();
     });
-    els.chips.appendChild(btn);
+    els.chips.appendChild(b);
   });
 }
 
-function bindControls() {
-  els.search.addEventListener("input", e => {
-    state.query = e.target.value.trim().toLowerCase();
+function bindControls(){
+  els.search.addEventListener("input", e=>{ state.query = e.target.value.trim().toLowerCase(); render(); });
+  els.clear.addEventListener("click", ()=>{
+    state.category = "Все"; state.query = ""; els.search.value = "";
+    [...els.chips.children].forEach((c,i)=>c.setAttribute("aria-pressed", i===0));
     render();
   });
-  els.clear.addEventListener("click", () => {
-    state.category = "Все";
-    state.query = "";
-    els.search.value = "";
-    [...els.chips.children].forEach((c, i) =>
-      c.setAttribute("aria-pressed", i === 0));
-    render();
+  els.random.addEventListener("click", ()=>{
+    const list = visible();
+    if(!list.length) return;
+    openModal(DATA.indexOf(list[Math.floor(Math.random()*list.length)]));
   });
-  els.random.addEventListener("click", pickRandom);
 }
 
-function visible() {
-  return DATA.filter(p => {
+function visible(){
+  return DATA.filter(p=>{
     const okCat = state.category === "Все" || p.category === state.category;
-    if (!okCat) return false;
-    if (!state.query) return true;
-    const hay = [p.title, p.category, p.note, (p.tags || []).join(" "), p.prompt]
-      .join(" ").toLowerCase();
-    return hay.includes(state.query);
+    if(!okCat) return false;
+    if(!state.query) return true;
+    return [p.title,p.category,p.note,(p.tags||[]).join(" "),p.prompt].join(" ").toLowerCase().includes(state.query);
   });
 }
 
-function render() {
+function render(){
   const list = visible();
   els.count.textContent = list.length;
   els.grid.innerHTML = "";
   els.empty.hidden = list.length > 0;
-
-  list.forEach((p, i) => {
-    const realIndex = DATA.indexOf(p);
-    els.grid.appendChild(card(p, realIndex));
-  });
+  list.forEach(p=> els.grid.appendChild(card(p, DATA.indexOf(p))));
 }
 
-function card(p, idx) {
+function num(i){ return String(i+1).padStart(2,"0"); }
+
+const COPY_ICON = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+
+function imageCard(p, idx){
+  return `
+    <div class="card__cover">
+      <img src="${esc(p.image)}" alt="" loading="lazy">
+      ${p.category ? `<span class="card__cat">${esc(p.category)}</span>` : ""}
+      <button class="card__copy" type="button" aria-label="Копировать">${COPY_ICON}</button>
+      <div class="card__grad"></div>
+      <div class="card__meta">
+        <p class="card__look">${HORNS} образ № ${num(idx)}</p>
+        <h3 class="card__title">${esc(p.title||"Без названия")}</h3>
+      </div>
+    </div>`;
+}
+
+function blockCard(p, idx){
+  return `
+    <div class="card__block">
+      <div class="card__head">
+        <span class="card__cat">${esc(p.category||"блок")}</span>
+        <button class="card__copy" type="button" aria-label="Копировать">${COPY_ICON}</button>
+      </div>
+      <p class="card__look">${HORNS} блок № ${num(idx)}</p>
+      <h3 class="card__title">${esc(p.title||"Без названия")}</h3>
+      <pre class="card__preview">${esc(p.prompt||"")}</pre>
+    </div>`;
+}
+
+function card(p, idx){
   const el = document.createElement("article");
   el.className = "card";
-  el.id = "p-" + idx;
+  el.id = "p-"+idx;
+  el.setAttribute("role","button");
+  el.setAttribute("tabindex","0");
+  el.setAttribute("aria-label", (p.title||"Запись")+" — открыть");
+  el.innerHTML = p.image ? imageCard(p, idx) : blockCard(p, idx);
 
-  const tags = (p.tags || []).filter(Boolean)
-    .map(t => `<span class="tag">${esc(t)}</span>`).join("");
-
-  el.innerHTML = `
-    ${p.image ? `<div class="card__media"><img src="${esc(p.image)}" alt="" loading="lazy"></div>` : ""}
-    <div class="card__body">
-      <span class="card__cat">${esc(p.category || "—")}</span>
-      <h3 class="card__title">${esc(p.title || "Без названия")}</h3>
-      ${p.note ? `<p class="card__note">${esc(p.note)}</p>` : ""}
-      <pre class="card__prompt">${esc(p.prompt || "")}</pre>
-      ${tags ? `<div class="card__tags">${tags}</div>` : ""}
-      <button class="copy" type="button">Копировать</button>
-    </div>`;
-
-  el.querySelector(".copy").addEventListener("click", e => copy(p.prompt, e.currentTarget));
+  el.addEventListener("click", ()=> openModal(idx));
+  el.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openModal(idx); }});
+  const cp = el.querySelector(".card__copy");
+  if(cp) cp.addEventListener("click", e=>{ e.stopPropagation(); copy(p.prompt, cp); });
   return el;
 }
 
-function pickRandom() {
-  const list = visible();
-  if (!list.length) return;
-  const pick = list[Math.floor(Math.random() * list.length)];
-  const node = document.getElementById("p-" + DATA.indexOf(pick));
-  if (!node) return;
-  node.scrollIntoView({ behavior: "smooth", block: "center" });
-  node.classList.remove("flash");
-  void node.offsetWidth;       // перезапуск анимации
-  node.classList.add("flash");
+/* ---------- модалка ---------- */
+let lastFocus = null;
+
+function bindModal(){
+  els.modal.querySelectorAll("[data-close]").forEach(b=> b.addEventListener("click", closeModal));
+  document.addEventListener("keydown", e=>{ if(e.key==="Escape" && els.modal.classList.contains("open")) closeModal(); });
+  document.getElementById("m-copy").addEventListener("click", function(){ copy(this._text || "", this); });
 }
 
-function copy(text, btn) {
-  const done = () => {
-    const old = btn.textContent;
-    btn.textContent = "Скопировано";
+function openModal(idx){
+  const p = DATA[idx];
+  if(!p) return;
+  lastFocus = document.activeElement;
+  const panel = els.modal.querySelector(".modal__panel");
+  const media = document.getElementById("m-media");
+  if(p.image){ panel.classList.remove("no-media"); media.innerHTML = `<img src="${esc(p.image)}" alt="">`; }
+  else { panel.classList.add("no-media"); media.innerHTML = ""; }
+  const kind = p.image ? "образ" : "блок";
+  document.getElementById("m-look").innerHTML = HORNS + " " + kind + " № " + num(idx) + (p.category ? " · " + esc(p.category) : "");
+  document.getElementById("m-title").textContent = p.title || "Без названия";
+  const note = document.getElementById("m-note");
+  note.textContent = p.note || ""; note.style.display = p.note ? "" : "none";
+  document.getElementById("m-tags").innerHTML = (p.tags||[]).filter(Boolean).map(t=>`<span class="tag">${esc(t)}</span>`).join("");
+  document.getElementById("m-prompt").textContent = p.prompt || "";
+  const copyBtn = document.getElementById("m-copy");
+  copyBtn._text = p.prompt || ""; copyBtn.textContent = "Копировать промпт"; copyBtn.classList.remove("is-copied");
+  els.modal.classList.add("open");
+  els.modal.setAttribute("aria-hidden","false");
+  document.body.style.overflow = "hidden";
+  els.modal.querySelector(".modal__close").focus();
+}
+
+function closeModal(){
+  els.modal.classList.remove("open");
+  els.modal.setAttribute("aria-hidden","true");
+  document.body.style.overflow = "";
+  if(lastFocus) lastFocus.focus();
+}
+
+/* ---------- копирование ---------- */
+function copy(text, btn){
+  const label = btn.textContent;
+  const done = ()=>{
     btn.classList.add("is-copied");
-    setTimeout(() => { btn.textContent = old; btn.classList.remove("is-copied"); }, 1400);
+    if(btn.id === "m-copy") btn.textContent = "Скопировано ✓";
+    setTimeout(()=>{ btn.classList.remove("is-copied"); if(btn.id==="m-copy") btn.textContent = label; }, 1500);
   };
-  if (navigator.clipboard && window.isSecureContext) {
-    navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
-  } else {
-    fallbackCopy(text, done);
-  }
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).then(done).catch(()=>fallback(text,done));
+  } else fallback(text,done);
 }
-
-function fallbackCopy(text, done) {
+function fallback(text, done){
   const ta = document.createElement("textarea");
-  ta.value = text;
-  ta.style.position = "fixed";
-  ta.style.opacity = "0";
-  document.body.appendChild(ta);
-  ta.select();
-  try { document.execCommand("copy"); done(); } catch (_) {}
+  ta.value = text; ta.style.position="fixed"; ta.style.opacity="0";
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand("copy"); done(); }catch(_){}
   document.body.removeChild(ta);
 }
 
-function esc(s) {
-  return String(s).replace(/[&<>"']/g, c =>
-    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-}
+function esc(s){ return String(s).replace(/[&<>"']/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c])); }
 
 document.addEventListener("DOMContentLoaded", init);
   </script>
