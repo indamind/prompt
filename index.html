@@ -5,22 +5,287 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>архив</title>
   <meta name="description" content="Личный архив промптов и наработок.">
-  <link rel="stylesheet" href="style.css">
+  <style>
+/* =========================================================
+   архив — стили
+   палитра: тёмная "чернильная" база, печатно-алый акцент
+   ========================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Prata&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root{
+  --ink:        #15120f;
+  --ink-2:      #1c1815;
+  --ink-3:      #272019;
+  --line:       #342b22;
+  --paper:      #ece6d9;
+  --paper-dim:  #998f80;
+  --seal:       #c4422c;
+  --seal-deep:  #9a3320;
+  --brass:      #b3905a;
+
+  --display: "Prata", Georgia, serif;
+  --body:    "Manrope", system-ui, sans-serif;
+  --mono:    "JetBrains Mono", ui-monospace, monospace;
+
+  --maxw: 1120px;
+  --radius: 4px;
+}
+
+*{ box-sizing: border-box; }
+
+html{ scroll-behavior: smooth; }
+
+body{
+  margin: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  /* лёгкая зернистость/градиент фона */
+  background-image:
+    radial-gradient(1200px 600px at 80% -10%, rgba(196,66,44,.08), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(179,144,90,.06), transparent 60%);
+  background-attachment: fixed;
+}
+
+a{ color: inherit; }
+
+.wrap{ width: min(var(--maxw), 92vw); margin-inline: auto; }
+
+.skip{
+  position: absolute; left: -9999px; top: 0;
+  background: var(--seal); color: #fff; padding: .6rem 1rem; z-index: 100;
+}
+.skip:focus{ left: 1rem; top: 1rem; }
+
+/* ---------- шапка ---------- */
+.nav{
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(21,18,15,.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.nav__inner{
+  display: flex; align-items: baseline; gap: 1.4rem;
+  padding: .9rem 0;
+}
+.brand{
+  font-family: var(--display);
+  font-size: 1.5rem;
+  letter-spacing: .02em;
+  text-decoration: none;
+  display: inline-flex; align-items: baseline; gap: .55rem;
+}
+.brand::before{
+  content: ""; width: .5rem; height: 1.05rem;
+  background: var(--seal);
+  display: inline-block; transform: translateY(.08rem);
+}
+.nav__links{ margin-left: auto; display: flex; gap: 1.3rem; font-size: .92rem; }
+.nav__links a{
+  text-decoration: none; color: var(--paper-dim);
+  padding-bottom: .15rem; border-bottom: 1px solid transparent;
+  transition: color .15s, border-color .15s;
+}
+.nav__links a:hover,
+.nav__links a[aria-current="page"]{ color: var(--paper); border-color: var(--seal); }
+
+/* ---------- hero ---------- */
+.hero{ padding: 5rem 0 3.5rem; }
+.hero__eyebrow{
+  font-family: var(--mono); font-size: .8rem; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--seal);
+  margin: 0 0 1.1rem;
+}
+.hero__title{
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(2.6rem, 7vw, 5rem);
+  line-height: 1.04;
+  margin: 0 0 1.2rem;
+  letter-spacing: .005em;
+}
+.hero__title em{ color: var(--seal); font-style: normal; }
+.hero__lead{
+  max-width: 46ch; color: var(--paper-dim);
+  font-size: 1.1rem; margin: 0 0 2rem;
+}
+.btn{
+  display: inline-flex; align-items: center; gap: .6rem;
+  font-family: var(--mono); font-size: .9rem; letter-spacing: .04em;
+  text-decoration: none;
+  padding: .8rem 1.4rem;
+  background: var(--seal); color: #fff;
+  border: 1px solid var(--seal); border-radius: var(--radius);
+  transition: background .15s, transform .1s;
+}
+.btn:hover{ background: var(--seal-deep); }
+.btn:active{ transform: translateY(1px); }
+.btn--ghost{ background: transparent; color: var(--paper); border-color: var(--line); }
+.btn--ghost:hover{ border-color: var(--seal); background: rgba(196,66,44,.08); }
+
+/* ---------- секции index ---------- */
+.section{ padding: 3rem 0; border-top: 1px solid var(--line); }
+.section__label{
+  font-family: var(--mono); font-size: .8rem; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--paper-dim); margin: 0 0 1.4rem;
+}
+.cols{ display: grid; gap: 1.6rem; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.note-card{
+  border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 1.4rem; background: var(--ink-2);
+}
+.note-card h3{ font-family: var(--display); font-weight: 400; font-size: 1.4rem; margin: 0 0 .5rem; }
+.note-card p{ color: var(--paper-dim); margin: 0; font-size: .96rem; }
+
+/* ---------- каталог: тулбар ---------- */
+.cat-head{ padding: 3.4rem 0 1.4rem; }
+.cat-head h1{
+  font-family: var(--display); font-weight: 400;
+  font-size: clamp(2.2rem, 5vw, 3.4rem); margin: 0 0 .4rem;
+}
+.cat-head p{ color: var(--paper-dim); margin: 0; }
+
+.toolbar{ position: sticky; top: 56px; z-index: 10; padding: 1rem 0; background: var(--ink); }
+.toolbar__row{ display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; }
+.search{
+  flex: 1 1 240px;
+  display: flex; align-items: center; gap: .6rem;
+  background: var(--ink-2); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: .6rem .9rem;
+}
+.search:focus-within{ border-color: var(--seal); }
+.search input{
+  flex: 1; background: none; border: none; color: var(--paper);
+  font-family: var(--body); font-size: .95rem; outline: none;
+}
+.search input::placeholder{ color: var(--paper-dim); }
+.search svg{ flex: none; opacity: .6; }
+
+.tool-btn{
+  font-family: var(--mono); font-size: .85rem;
+  background: var(--ink-2); color: var(--paper);
+  border: 1px solid var(--line); border-radius: var(--radius);
+  padding: .6rem 1rem; cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+.tool-btn:hover{ border-color: var(--seal); }
+
+.chips{ display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .9rem; }
+.chip{
+  font-family: var(--mono); font-size: .82rem; letter-spacing: .02em;
+  background: transparent; color: var(--paper-dim);
+  border: 1px solid var(--line); border-radius: 999px;
+  padding: .42rem .9rem; cursor: pointer;
+  transition: all .15s;
+}
+.chip:hover{ color: var(--paper); border-color: var(--paper-dim); }
+.chip[aria-pressed="true"]{ background: var(--seal); border-color: var(--seal); color: #fff; }
+
+.meta-row{
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin: 1.4rem 0 .6rem; color: var(--paper-dim);
+  font-family: var(--mono); font-size: .82rem; letter-spacing: .04em;
+}
+
+/* ---------- сетка карточек ---------- */
+.grid{
+  display: grid; gap: 1.2rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  padding-bottom: 4rem;
+}
+.card{
+  display: flex; flex-direction: column;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--ink-2); overflow: hidden;
+  transition: border-color .15s, transform .15s;
+}
+.card:hover{ border-color: var(--ink-3); transform: translateY(-2px); }
+.card.flash{ animation: flash 1.3s ease; }
+@keyframes flash{
+  0%   { border-color: var(--seal); box-shadow: 0 0 0 3px rgba(196,66,44,.35); }
+  100% { border-color: var(--line);  box-shadow: 0 0 0 0 transparent; }
+}
+.card__media{ aspect-ratio: 4 / 3; background: var(--ink-3); overflow: hidden; }
+.card__media img{ width: 100%; height: 100%; object-fit: cover; display: block; }
+.card__body{ display: flex; flex-direction: column; gap: .7rem; padding: 1.2rem; flex: 1; }
+.card__cat{
+  font-family: var(--mono); font-size: .72rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--seal);
+}
+.card__title{ font-family: var(--display); font-weight: 400; font-size: 1.35rem; margin: 0; line-height: 1.2; }
+.card__note{ color: var(--paper-dim); font-size: .9rem; margin: 0; }
+.card__prompt{
+  font-family: var(--mono); font-size: .82rem; line-height: 1.55;
+  color: #d9d2c4; background: var(--ink);
+  border: 1px solid var(--line); border-radius: var(--radius);
+  padding: .8rem; margin: 0;
+  white-space: pre-wrap; word-break: break-word;
+  max-height: 9.5rem; overflow: auto;
+}
+.card__tags{ display: flex; flex-wrap: wrap; gap: .4rem; }
+.tag{
+  font-family: var(--mono); font-size: .72rem; color: var(--paper-dim);
+  border: 1px solid var(--line); border-radius: 999px; padding: .2rem .6rem;
+}
+.copy{
+  margin-top: auto;
+  font-family: var(--mono); font-size: .85rem;
+  background: transparent; color: var(--paper);
+  border: 1px solid var(--line); border-radius: var(--radius);
+  padding: .65rem 1rem; cursor: pointer;
+  transition: all .15s;
+}
+.copy:hover{ border-color: var(--seal); background: rgba(196,66,44,.08); }
+.copy.is-copied{ background: var(--seal); border-color: var(--seal); color: #fff; }
+
+.empty{
+  text-align: center; color: var(--paper-dim);
+  padding: 4rem 1rem; font-family: var(--mono); font-size: .9rem;
+}
+
+/* ---------- футер ---------- */
+.foot{
+  border-top: 1px solid var(--line);
+  padding: 2.2rem 0; margin-top: 2rem;
+  display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between;
+  color: var(--paper-dim); font-size: .9rem;
+}
+.foot a{ color: var(--paper-dim); text-decoration: none; }
+.foot a:hover{ color: var(--paper); }
+[data-links]{ display: flex; gap: 1.2rem; }
+
+/* ---------- доступность ---------- */
+:focus-visible{ outline: 2px solid var(--seal); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation: none !important; scroll-behavior: auto !important; transition: none !important; }
+}
+
+@media (max-width: 640px){
+  .nav__inner{ gap: .8rem; }
+  .nav__links{ gap: .9rem; font-size: .85rem; }
+  .hero{ padding: 3.4rem 0 2.4rem; }
+  .toolbar{ top: 52px; }
+}
+  </style>
 </head>
 <body>
-  <a class="skip" href="#main">К содержанию</a>
+  <a class="skip" href="#grid">К промптам</a>
 
   <nav class="nav">
     <div class="wrap nav__inner">
-      <a class="brand" href="index.html"><span data-site-name>архив</span></a>
+      <a class="brand" href="#top"><span data-site-name>архив</span></a>
       <div class="nav__links">
-        <a href="index.html" aria-current="page">Главная</a>
-        <a href="catalogue.html">Каталог</a>
+        <a href="#top">Главная</a>
+        <a href="#grid">Каталог</a>
       </div>
     </div>
   </nav>
 
-  <main id="main">
+  <main id="top">
     <header class="hero wrap">
       <p class="hero__eyebrow" data-tagline>промпты и наработки</p>
       <h1 class="hero__title">Всё в&nbsp;<em>одном</em><br>месте.</h1>
@@ -28,28 +293,30 @@
         Личный архив промптов, образов и наработок — собранный, отсортированный
         и готовый к копированию в один клик.
       </p>
-      <a class="btn" href="catalogue.html">Открыть каталог →</a>
+      <a class="btn" href="#grid">Открыть каталог →</a>
     </header>
 
-    <section class="section">
+    <div class="toolbar">
       <div class="wrap">
-        <p class="section__label">Что внутри</p>
-        <div class="cols">
-          <div class="note-card">
-            <h3>Каталог</h3>
-            <p>Карточки с фильтрами по категориям, поиском и кнопкой «копировать».</p>
-          </div>
-          <div class="note-card">
-            <h3>Категории</h3>
-            <p>Соло, пара, образы, сцены — структура, которую легко расширять под себя.</p>
-          </div>
-          <div class="note-card">
-            <h3>Один файл</h3>
-            <p>Чтобы добавить промпт, правишь только список в <code>prompts.js</code>.</p>
-          </div>
+        <div class="toolbar__row">
+          <label class="search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>
+            </svg>
+            <input id="search" type="search" placeholder="Поиск по названию, тегу, тексту…" aria-label="Поиск">
+          </label>
+          <button id="random" class="tool-btn" type="button">Мне повезёт</button>
+          <button id="clear" class="tool-btn" type="button">Очистить</button>
         </div>
+        <div id="chips" class="chips" role="group" aria-label="Категории"></div>
       </div>
-    </section>
+    </div>
+
+    <div class="wrap">
+      <div class="meta-row"><span>Показано: <span id="count">0</span></span></div>
+      <div id="grid" class="grid"></div>
+      <p id="empty" class="empty" hidden>Ничего не нашлось. Попробуй другой запрос или категорию.</p>
+    </div>
   </main>
 
   <footer class="foot wrap">
@@ -57,7 +324,250 @@
     <span data-links></span>
   </footer>
 
-  <script src="prompts.js"></script>
-  <script src="app.js"></script>
+  <script>
+/* ============================================================
+   ТВОИ ПРОМПТЫ ЖИВУТ ЗДЕСЬ
+   ------------------------------------------------------------
+   Чтобы добавить новый промпт — скопируй один блок { ... }
+   и впиши свои данные. Поля:
+
+     title     — название карточки
+     category  — категория (по ним строятся фильтры сверху)
+     tags      — список тегов через запятую (для поиска), можно []
+     prompt    — сам текст промпта (его копирует кнопка)
+     note      — короткая подпись/комментарий (можно "" — пусто)
+     image     — ссылка на пример картинки или имя файла, если
+                 положишь картинку в репозиторий рядом (можно "" — пусто)
+
+   Категории создаются автоматически из поля category —
+   просто пиши нужное название, фильтр появится сам.
+   ============================================================ */
+
+window.PROMPTS = [
+  {
+    title: "Пример · кинематографичный портрет",
+    category: "Соло",
+    tags: ["noir", "rain", "neon"],
+    prompt: "cinematic portrait, lone figure under neon rain, wet asphalt reflections, shallow depth of field, moody low-key lighting, 35mm film grain",
+    note: "Это пример. Замени на свой промпт.",
+    image: ""
+  },
+  {
+    title: "Пример · сцена на двоих",
+    category: "Пара",
+    tags: ["interior", "warm"],
+    prompt: "two characters in a dim tatami room, warm lantern light, intimate composition, soft shadows, cinematic colour grade",
+    note: "",
+    image: ""
+  },
+  {
+    title: "Пример · образ / рестайл",
+    category: "Образы",
+    tags: ["fashion", "dark", "street"],
+    prompt: "full body, dark alt streetwear, layered silhouette, oversized coat, urban backdrop at dusk, editorial fashion photography",
+    note: "Сюда удобно складывать гардероб / рестайлы.",
+    image: ""
+  },
+  {
+    title: "Пример · атмосферная сцена",
+    category: "Сцены",
+    tags: ["mood", "city"],
+    prompt: "wide establishing shot, rain-soaked city street at night, distant neon signs, volumetric fog, anamorphic lens flare",
+    note: "",
+    image: ""
+  }
+];
+
+/* ============================================================
+   НАСТРОЙКИ САЙТА — меняй здесь
+   ============================================================ */
+const CONFIG = {
+  siteName:  "архив",                 // короткое имя в шапке
+  tagline:   "промпты и наработки",   // подзаголовок
+  handle:    "@yourname",             // твой ник
+  links: {                            // оставь "" чтобы скрыть ссылку
+    telegram: "",                     // напр. "https://t.me/yourname"
+    github:   "",                     // напр. "https://github.com/yourname"
+    profile:  ""                      // любая внешняя страница
+  }
+};
+
+/* ============================================================
+   Дальше можно не трогать
+   ============================================================ */
+const DATA = Array.isArray(window.PROMPTS) ? window.PROMPTS : [];
+
+const state = { category: "Все", query: "" };
+
+const els = {};
+
+function init() {
+  // шапка / футер — подставляем CONFIG
+  document.querySelectorAll("[data-site-name]").forEach(n => n.textContent = CONFIG.siteName);
+  document.querySelectorAll("[data-tagline]").forEach(n => n.textContent = CONFIG.tagline);
+  document.querySelectorAll("[data-handle]").forEach(n => n.textContent = CONFIG.handle);
+  buildLinks();
+
+  // только на странице каталога
+  els.grid = document.getElementById("grid");
+  if (!els.grid) return;
+
+  els.chips  = document.getElementById("chips");
+  els.search = document.getElementById("search");
+  els.count  = document.getElementById("count");
+  els.random = document.getElementById("random");
+  els.clear  = document.getElementById("clear");
+  els.empty  = document.getElementById("empty");
+
+  buildChips();
+  bindControls();
+  render();
+}
+
+function buildLinks() {
+  document.querySelectorAll("[data-links]").forEach(holder => {
+    holder.innerHTML = "";
+    const map = { telegram: "Telegram", github: "GitHub", profile: "Профиль" };
+    Object.entries(CONFIG.links).forEach(([key, url]) => {
+      if (!url) return;
+      const a = document.createElement("a");
+      a.href = url;
+      a.textContent = map[key] || key;
+      a.target = "_blank";
+      a.rel = "noopener";
+      holder.appendChild(a);
+    });
+    if (!holder.children.length) holder.remove();
+  });
+}
+
+function categories() {
+  const set = new Set(DATA.map(p => p.category).filter(Boolean));
+  return ["Все", ...[...set].sort((a, b) => a.localeCompare(b, "ru"))];
+}
+
+function buildChips() {
+  els.chips.innerHTML = "";
+  categories().forEach(cat => {
+    const btn = document.createElement("button");
+    btn.className = "chip";
+    btn.textContent = cat;
+    btn.setAttribute("aria-pressed", cat === state.category);
+    btn.addEventListener("click", () => {
+      state.category = cat;
+      [...els.chips.children].forEach(c =>
+        c.setAttribute("aria-pressed", c === btn));
+      render();
+    });
+    els.chips.appendChild(btn);
+  });
+}
+
+function bindControls() {
+  els.search.addEventListener("input", e => {
+    state.query = e.target.value.trim().toLowerCase();
+    render();
+  });
+  els.clear.addEventListener("click", () => {
+    state.category = "Все";
+    state.query = "";
+    els.search.value = "";
+    [...els.chips.children].forEach((c, i) =>
+      c.setAttribute("aria-pressed", i === 0));
+    render();
+  });
+  els.random.addEventListener("click", pickRandom);
+}
+
+function visible() {
+  return DATA.filter(p => {
+    const okCat = state.category === "Все" || p.category === state.category;
+    if (!okCat) return false;
+    if (!state.query) return true;
+    const hay = [p.title, p.category, p.note, (p.tags || []).join(" "), p.prompt]
+      .join(" ").toLowerCase();
+    return hay.includes(state.query);
+  });
+}
+
+function render() {
+  const list = visible();
+  els.count.textContent = list.length;
+  els.grid.innerHTML = "";
+  els.empty.hidden = list.length > 0;
+
+  list.forEach((p, i) => {
+    const realIndex = DATA.indexOf(p);
+    els.grid.appendChild(card(p, realIndex));
+  });
+}
+
+function card(p, idx) {
+  const el = document.createElement("article");
+  el.className = "card";
+  el.id = "p-" + idx;
+
+  const tags = (p.tags || []).filter(Boolean)
+    .map(t => `<span class="tag">${esc(t)}</span>`).join("");
+
+  el.innerHTML = `
+    ${p.image ? `<div class="card__media"><img src="${esc(p.image)}" alt="" loading="lazy"></div>` : ""}
+    <div class="card__body">
+      <span class="card__cat">${esc(p.category || "—")}</span>
+      <h3 class="card__title">${esc(p.title || "Без названия")}</h3>
+      ${p.note ? `<p class="card__note">${esc(p.note)}</p>` : ""}
+      <pre class="card__prompt">${esc(p.prompt || "")}</pre>
+      ${tags ? `<div class="card__tags">${tags}</div>` : ""}
+      <button class="copy" type="button">Копировать</button>
+    </div>`;
+
+  el.querySelector(".copy").addEventListener("click", e => copy(p.prompt, e.currentTarget));
+  return el;
+}
+
+function pickRandom() {
+  const list = visible();
+  if (!list.length) return;
+  const pick = list[Math.floor(Math.random() * list.length)];
+  const node = document.getElementById("p-" + DATA.indexOf(pick));
+  if (!node) return;
+  node.scrollIntoView({ behavior: "smooth", block: "center" });
+  node.classList.remove("flash");
+  void node.offsetWidth;       // перезапуск анимации
+  node.classList.add("flash");
+}
+
+function copy(text, btn) {
+  const done = () => {
+    const old = btn.textContent;
+    btn.textContent = "Скопировано";
+    btn.classList.add("is-copied");
+    setTimeout(() => { btn.textContent = old; btn.classList.remove("is-copied"); }, 1400);
+  };
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+  } else {
+    fallbackCopy(text, done);
+  }
+}
+
+function fallbackCopy(text, done) {
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand("copy"); done(); } catch (_) {}
+  document.body.removeChild(ta);
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+document.addEventListener("DOMContentLoaded", init);
+  </script>
 </body>
 </html>
