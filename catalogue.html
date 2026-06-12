@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Каталог — архив</title>
+  <meta name="description" content="Каталог промптов с фильтрами, поиском и копированием.">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <a class="skip" href="#grid">К промптам</a>
+
+  <nav class="nav">
+    <div class="wrap nav__inner">
+      <a class="brand" href="index.html"><span data-site-name>архив</span></a>
+      <div class="nav__links">
+        <a href="index.html">Главная</a>
+        <a href="catalogue.html" aria-current="page">Каталог</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <header class="cat-head wrap">
+      <h1>Каталог</h1>
+      <p>Фильтруй по категориям, ищи по словам, копируй в один клик.</p>
+    </header>
+
+    <div class="toolbar">
+      <div class="wrap">
+        <div class="toolbar__row">
+          <label class="search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>
+            </svg>
+            <input id="search" type="search" placeholder="Поиск по названию, тегу, тексту…" aria-label="Поиск">
+          </label>
+          <button id="random" class="tool-btn" type="button">Мне повезёт</button>
+          <button id="clear" class="tool-btn" type="button">Очистить</button>
+        </div>
+        <div id="chips" class="chips" role="group" aria-label="Категории"></div>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <div class="meta-row">
+        <span>Показано: <span id="count">0</span></span>
+      </div>
+      <div id="grid" class="grid"></div>
+      <p id="empty" class="empty" hidden>Ничего не нашлось. Попробуй другой запрос или категорию.</p>
+    </div>
+  </main>
+
+  <footer class="foot wrap">
+    <span data-handle>@yourname</span>
+    <span data-links></span>
+  </footer>
+
+  <script src="data/prompts.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
