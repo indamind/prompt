@@ -78,12 +78,18 @@ a{ color: inherit; }
   letter-spacing:.01em; text-decoration:none;
 }
 .brand .horns{ font-size:1.05rem; transform: translateY(-1px); }
-.nav__links{ margin-left:auto; display:flex; gap:1.4rem; font-family:var(--mono); font-size:.82rem; letter-spacing:.04em; }
+.nav__links{ margin-left:auto; display:flex; flex-wrap:wrap; align-items:center; gap:1.4rem; font-family:var(--mono); font-size:.82rem; letter-spacing:.04em; }
 .nav__links a{
   text-decoration:none; color:var(--ash); padding-bottom:.2rem;
   border-bottom:1px solid transparent; transition:color .18s, border-color .18s;
 }
 .nav__links a:hover{ color:var(--bone); border-color:var(--demon); }
+.nav__ext{ display:inline-flex; align-items:center; gap:1.4rem; }
+.nav__ext:not(:empty)::before{ content:""; width:1px; height:13px; background:var(--line); }
+.nav__ext .ext{ color:var(--demon); border-bottom:1px solid transparent; }
+.nav__ext .ext:hover{ color:var(--blush); border-color:var(--demon); }
+.handle-link{ text-decoration:none; color:inherit; transition:color .18s; }
+.handle-link:hover{ color:var(--demon); }
 
 /* ---------- hero / masthead ---------- */
 .hero{ padding: 5.5rem 0 3rem; position:relative; }
@@ -265,13 +271,14 @@ a{ color: inherit; }
       <div class="nav__links">
         <a href="#top">Главная</a>
         <a href="#grid">Каталог</a>
+        <span class="nav__ext" data-links-nav></span>
       </div>
     </div>
   </nav>
 
   <main id="top">
     <header class="hero wrap">
-      <p class="masthead"><span data-handle>@yourname</span> <b data-tagline>промпты и наработки</b></p>
+      <p class="masthead"><a data-handle class="handle-link" href="#">@yourname</a> <b data-tagline>промпты и наработки</b></p>
       <div class="hero__body">
         <div class="hero__text">
           <h1 class="hero__title">Архив<br><em>промптов</em></h1>
@@ -311,7 +318,7 @@ a{ color: inherit; }
   </main>
 
   <footer class="foot wrap">
-    <span data-handle>@yourname</span>
+    <a data-handle class="handle-link" href="#">@yourname</a>
     <span data-links></span>
   </footer>
 
@@ -341,7 +348,12 @@ const CONFIG = {
   siteName: "архив",
   tagline:  "промпты и наработки",
   handle:   "@indamindbot",
-  links: { telegram: "", github: "", profile: "" }   // "" = скрыть
+  handleUrl: "https://t.me/indamindbot",      // ссылка на тег @indamindbot
+  links: {                                    // ссылки в меню и подвале ("" = скрыть строку)
+    "IndamindAI": "https://indamindai.com/",
+    "Канал":      "https://t.me/your_cai",
+    "Инфо":       "https://t.me/indamindbot"
+  }
 };
 
 const HORNS = '<svg class="horns" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15C9.2 13 6.8 9.2 6 3c2.9 2.4 5 5.9 6 12zm0 0c2.8-2 5.2-5.8 6-12-2.9 2.4-5 5.9-6 12z"/></svg>';
@@ -355,8 +367,11 @@ function init(){
   DATA = Array.isArray(window.PROMPTS) ? window.PROMPTS : [];
   document.querySelectorAll("[data-site-name]").forEach(n => n.textContent = CONFIG.siteName);
   document.querySelectorAll("[data-tagline]").forEach(n => n.textContent = CONFIG.tagline);
-  document.querySelectorAll("[data-handle]").forEach(n => n.textContent = CONFIG.handle);
-  buildLinks();
+  document.querySelectorAll("[data-handle]").forEach(n => {
+    n.textContent = CONFIG.handle;
+    if(n.tagName === "A" && CONFIG.handleUrl){ n.href = CONFIG.handleUrl; n.target = "_blank"; n.rel = "noopener"; }
+  });
+  fillLinks();
 
   els.grid = document.getElementById("grid");
   if(!els.grid) return;
@@ -375,17 +390,26 @@ function init(){
   render();
 }
 
-function buildLinks(){
-  const map = { telegram:"Telegram", github:"GitHub", profile:"Профиль" };
+function fillLinks(){
+  const entries = Object.entries(CONFIG.links).filter(([_, u]) => u);
+  // подвал
   document.querySelectorAll("[data-links]").forEach(holder=>{
     holder.innerHTML = "";
-    Object.entries(CONFIG.links).forEach(([k,url])=>{
-      if(!url) return;
+    entries.forEach(([label, url])=>{
       const a = document.createElement("a");
-      a.href = url; a.textContent = map[k] || k; a.target = "_blank"; a.rel = "noopener";
+      a.href = url; a.textContent = label; a.target = "_blank"; a.rel = "noopener";
       holder.appendChild(a);
     });
     if(!holder.children.length) holder.remove();
+  });
+  // верхнее меню (розовые ссылки)
+  document.querySelectorAll("[data-links-nav]").forEach(holder=>{
+    holder.innerHTML = "";
+    entries.forEach(([label, url])=>{
+      const a = document.createElement("a");
+      a.className = "ext"; a.href = url; a.textContent = label; a.target = "_blank"; a.rel = "noopener";
+      holder.appendChild(a);
+    });
   });
 }
 
