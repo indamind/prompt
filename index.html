@@ -265,6 +265,16 @@ input, textarea, select { cursor: text !important; }
 @media (hover: none), (pointer: coarse) { html, body, a, button, [role="button"], .chip, .tool-btn, .btn, .card, input, textarea, select { cursor: auto !important; } }
     @keyframes rpShimmer { 0%{filter:hue-rotate(0deg) brightness(1.15)} 50%{filter:hue-rotate(-55deg) brightness(1.6)} 100%{filter:hue-rotate(0deg) brightness(1.15)} }
   .siteglow.over{ animation: rpShimmer 1.1s linear infinite; }
+  
+  /* ===== NSFW 21+ ===== */
+  .chip--nsfw{ border-color:#7a2740; color:#ff6aa0; }
+  .chip--nsfw[aria-pressed="true"]{ background:#7a1030; border-color:#7a1030; color:#ffd6e4; }
+  .grid.nsfw-blur{ filter: blur(16px); pointer-events:none; user-select:none; opacity:.5; }
+  .nsfwgate{ border:1px solid var(--line); border-radius:8px; background:linear-gradient(180deg, rgba(122,16,48,.20), var(--coal)); padding:2.4rem 1.5rem; text-align:center; margin:0 0 1.3rem; }
+  .nsfwgate__lock{ font-size:2.4rem; line-height:1; margin-bottom:.5rem; }
+  .nsfwgate h3{ font-family:var(--display); font-weight:700; font-size:1.7rem; margin:.2rem 0 .5rem; }
+  .nsfwgate p{ color:var(--ash); max-width:48ch; margin:0 auto 1.5rem; font-size:.97rem; }
+  .nsfwgate__btns{ display:flex; gap:.8rem; justify-content:center; flex-wrap:wrap; }
   </style>
 </head>
 <body>
@@ -319,6 +329,15 @@ input, textarea, select { cursor: text !important; }
 
     <div class="wrap">
       <div class="meta-row"><span>Промтов: <span id="count">0</span></span></div>
+      <div id="nsfwgate" class="nsfwgate" hidden>
+        <div class="nsfwgate__lock">🔞</div>
+        <h3>Раздел 21+</h3>
+        <p>Здесь материалы откровенного содержания только для взрослых. Открывая раздел, ты подтверждаешь, что тебе есть 21 год.</p>
+        <div class="nsfwgate__btns">
+          <button id="nsfwyes" class="btn" type="button">Мне есть 21 — открыть</button>
+          <button id="nsfwno" class="tool-btn" type="button">Назад</button>
+        </div>
+      </div>
       <div id="grid" class="grid"></div>
       <p id="empty" class="empty" hidden>Ничего не нашлось. Попробуй другой запрос или категорию.</p>
       <div id="pager" class="pager"></div>
@@ -368,7 +387,7 @@ const HORNS = '<svg class="horns" viewBox="0 0 24 24" aria-hidden="true"><path d
 
 let DATA = [];
 const PER_PAGE = 12;
-const state = { category: "Все", query: "", page: 1 };
+const state = { category: "Все", query: "", page: 1, nsfwOk: false };
 const els = {};
 
 function init(){
@@ -391,8 +410,11 @@ function init(){
   els.empty  = document.getElementById("empty");
   els.modal  = document.getElementById("modal");
   els.pager  = document.getElementById("pager");
+  els.nsfwgate = document.getElementById("nsfwgate");
+  try { state.nsfwOk = sessionStorage.getItem("nsfw_ok") === "1"; } catch(e){}
 
   buildChips();
+  setupNsfwGate();
   bindControls();
   bindModal();
   render();
@@ -423,14 +445,28 @@ function fillLinks(){
 
 function categories(){
   const set = new Set(DATA.map(p=>p.category).filter(Boolean));
-  return ["Все", ...[...set].sort((a,b)=>a.localeCompare(b,"ru"))];
+  const rest = [...set].filter(c=>c!=="NSFW 21+").sort((a,b)=>a.localeCompare(b,"ru"));
+  const out = ["Все", ...rest];
+  if(set.has("NSFW 21+")) out.push("NSFW 21+");
+  return out;
+}
+
+function setupNsfwGate(){
+  const yes = document.getElementById("nsfwyes");
+  const no  = document.getElementById("nsfwno");
+  if(yes) yes.addEventListener("click", ()=>{ state.nsfwOk = true; try{ sessionStorage.setItem("nsfw_ok","1"); }catch(e){} render(); });
+  if(no)  no.addEventListener("click", ()=>{
+    state.category = "Все"; state.page = 1;
+    [...els.chips.children].forEach((c,i)=>c.setAttribute("aria-pressed", i===0));
+    render();
+  });
 }
 
 function buildChips(){
   els.chips.innerHTML = "";
   categories().forEach(cat=>{
     const b = document.createElement("button");
-    b.className = "chip"; b.textContent = cat;
+    b.className = "chip" + (cat==="NSFW 21+" ? " chip--nsfw" : ""); b.textContent = cat;
     b.setAttribute("aria-pressed", cat === state.category);
     b.addEventListener("click", ()=>{
       state.category = cat; state.page = 1;
@@ -456,7 +492,11 @@ function bindControls(){
 }
 
 function visible(){
+  const NS = "NSFW 21+";
   return DATA.filter(p=>{
+    const isNs = p.category === NS;
+    if(state.category === NS){ if(!isNs) return false; }
+    else if(isNs){ return false; }
     const okCat = state.category === "Все" || p.category === state.category;
     if(!okCat) return false;
     if(!state.query) return true;
@@ -475,6 +515,9 @@ function render(){
   els.grid.innerHTML = "";
   els.empty.hidden = list.length > 0;
   slice.forEach(p=> els.grid.appendChild(card(p, DATA.indexOf(p))));
+  const locked = state.category === "NSFW 21+" && !state.nsfwOk;
+  els.grid.classList.toggle("nsfw-blur", locked);
+  if(els.nsfwgate) els.nsfwgate.hidden = !locked;
   renderPager(pages);
 }
 
